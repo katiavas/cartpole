@@ -40,8 +40,8 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
     # We have 1000 episodes/ time steps
     intr = []
     while episode < max_eps:
-        env.seed(SEED)
-        env.action_space.seed(SEED)
+        # env.seed(SEED)
+        # env.action_space.seed(SEED)
         obs = env.reset()
         # env.seed(SEED)
         # env.action_space.seed(SEED)
