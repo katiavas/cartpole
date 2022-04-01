@@ -22,9 +22,9 @@ class Memory:
 
     def remember(self, state, action, reward, new_state, value, log_p):
         # T.use_deterministic_algorithms(True)
-        # random.seed(self.seed)
-        # np.random.seed(self.seed)
-        # T.manual_seed(self.seed)
+        random.seed(self.seed)
+        np.random.seed(self.seed)
+        T.manual_seed(self.seed)
         self.actions.append(action)
         self.rewards.append(reward)
         self.states.append(state)
