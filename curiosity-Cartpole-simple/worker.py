@@ -66,7 +66,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             # print(env.step(action))
             # take your action
             obs_, reward, done, info = env.step(action)
-            env.seed(SEED)
+            # env.seed(SEED)
             env.action_space.seed(SEED)
             
             # increment total steps, episode steps, increase your score
