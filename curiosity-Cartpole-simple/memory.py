@@ -2,7 +2,7 @@ import random
 import numpy as np
 import torch as T
 
-T.use_deterministic_algorithms(True)
+# T.use_deterministic_algorithms(True)
 
 
 class Memory:
