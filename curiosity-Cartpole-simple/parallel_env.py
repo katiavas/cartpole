@@ -4,12 +4,17 @@ from icm import ICM
 from shared_adam import SharedAdam
 from worker import worker
 import torch as T
+import random
+import numpy as np
 
 
 class ParallelEnv:
     def __init__(self, env_id, input_shape, n_actions, icm, n_threads=8):
+        # SEED = 111
+        # random.seed(SEED)
+        # np.random.seed(SEED)
+        # T.manual_seed(SEED)
         names = [str(i) for i in range(1, n_threads+1)]
-        T.manual_seed(5)
         global_actor_critic = ActorCritic(input_shape, n_actions)
         # share the memory of our global agent amongst our local agents
         '''You are gonna have a whole bunch of independent agent interacting with their own thread
