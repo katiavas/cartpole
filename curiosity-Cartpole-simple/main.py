@@ -2,11 +2,17 @@ import os
 import torch.multiprocessing as mp
 from parallel_env import ParallelEnv
 import gym
+import random
+import torch as T
+import numpy as np
 
 os.environ['OMP_NUM_THREADS'] = '1'
-
+SEED = 111
 
 if __name__ == '__main__':
+    random.seed(SEED)
+    np.random.seed(SEED)
+    T.manual_seed(SEED)
     mp.set_start_method('spawn')
     env_id = 'CartPole-v1'
     n_threads = 12
