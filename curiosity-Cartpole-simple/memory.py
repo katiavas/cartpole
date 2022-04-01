@@ -10,10 +10,10 @@ class Memory:
 
     def __init__(self):
         # T.use_deterministic_algorithms(True)
-        # self.seed = 111
-        # random.seed(self.seed)
-        # np.random.seed(self.seed)
-        # T.manual_seed(self.seed)
+        self.seed = 111
+        random.seed(self.seed)
+        np.random.seed(self.seed)
+        T.manual_seed(self.seed)
         self.states = []
         self.actions = []
         self.rewards = []
