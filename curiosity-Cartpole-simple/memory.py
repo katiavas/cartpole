@@ -6,10 +6,10 @@ T.use_deterministic_algorithms(True)
 
 
 class Memory:
-    T.use_deterministic_algorithms(True)
+    # T.use_deterministic_algorithms(True)
 
     def __init__(self):
-        T.use_deterministic_algorithms(True)
+        # T.use_deterministic_algorithms(True)
         self.seed = 111
         random.seed(self.seed)
         np.random.seed(self.seed)
@@ -22,7 +22,7 @@ class Memory:
         self.log_probs = []
 
     def remember(self, state, action, reward, new_state, value, log_p):
-        T.use_deterministic_algorithms(True)
+        # T.use_deterministic_algorithms(True)
         random.seed(self.seed)
         np.random.seed(self.seed)
         T.manual_seed(self.seed)
