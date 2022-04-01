@@ -1,16 +1,22 @@
 import torch as T
+import random
+import numpy as np
 
 
 # optimising our parameters
 # params = default parameters
-
+SEED =111
 
 class SharedAdam(T.optim.Adam):
     def __init__(self, params, lr=1e-4, betas=(0.9, 0.99), eps=1e-8,
                  weight_decay=0):
         super(SharedAdam, self).__init__(params, lr=lr, betas=betas,
                                          eps=eps, weight_decay=weight_decay)
-        T.manual_seed(5)
+
+        random.seed(SEED)
+        np.random.seed(SEED)
+        T.manual_seed(SEED)
+
         # self.defaults['seed_base'] = seed
         # Iterate over our parameter groups
         for group in self.param_groups:

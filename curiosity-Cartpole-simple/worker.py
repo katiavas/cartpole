@@ -83,8 +83,6 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             if ep_steps % T_MAX == 0 or done:
                 states, actions, rewards, new_states, values, log_probs = \
                     memory.sample_memory()
-                env.seed(SEED)
-                env.action_space.seed(SEED)
                 # If we are doing icm then we want to calculate our loss according to icm
                 if icm:
                     intrinsic_reward, L_I, L_F = \
