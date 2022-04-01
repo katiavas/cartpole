@@ -7,11 +7,16 @@ from memory import Memory
 from utils import plot_learning_curve
 from utils import plot_intrinsic_reward
 import torch as T
+import random
 from utils import plot_learning_curve_with_shaded_error
 
 
 def worker(name, input_shape, n_actions, global_agent, global_icm,
            optimizer, icm_optimizer, env_id, n_threads, icm=False):
+    SEED =111
+    random.seed(SEED)
+    np.random.seed(SEED)
+    T.manual_seed(SEED)
     T_MAX = 20
     local_agent = ActorCritic(input_shape, n_actions)
 
@@ -26,8 +31,8 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
     memory = Memory()
     # its own environment
     env = gym.make(env_id)
-    env.seed(111)
-    env.action_space.seed(111)
+    env.seed(SEED)
+    env.action_space.seed(SEED)
 
     # how many time steps we have, the episode , the score, the average score
     t_steps, max_eps, episode, scores, avg_score = 0, 1000, 0, [], 0
