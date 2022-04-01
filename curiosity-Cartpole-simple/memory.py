@@ -45,6 +45,8 @@ class Memory:
         self.log_probs = []
 
     def sample_memory(self):
+        SEED = 111
+
         # T.use_deterministic_algorithms(True)
         random.seed(SEED)
         np.random.seed(SEED)
