@@ -43,7 +43,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
         # env.seed(SEED)
         # env.action_space.seed(SEED)
         obs = env.reset()
-        env.seed(SEED)
+        # env.seed(SEED)
         env.action_space.seed(SEED)
         # make your hidden state for the actor critic a3c
         hx = T.zeros(1, 256)
