@@ -13,6 +13,7 @@ from utils import plot_learning_curve_with_shaded_error
 
 def worker(name, input_shape, n_actions, global_agent, global_icm,
            optimizer, icm_optimizer, env_id, n_threads, icm=False):
+    T.use_deterministic_algorithms(True)
     SEED =111
     random.seed(SEED)
     np.random.seed(SEED)
