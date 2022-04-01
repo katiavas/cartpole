@@ -4,11 +4,12 @@ import torch as T
 
 # T.use_deterministic_algorithms(True)
 
-SEED = 111
 class Memory:
     # T.use_deterministic_algorithms(True)
 
     def __init__(self):
+        SEED = 111
+
         T.use_deterministic_algorithms(True)
         random.seed(SEED)
         np.random.seed(SEED)
@@ -22,9 +23,9 @@ class Memory:
 
     def remember(self, state, action, reward, new_state, value, log_p):
         # T.use_deterministic_algorithms(True)
-        random.seed(SEED)
-        np.random.seed(SEED)
-        T.manual_seed(SEED)
+        # random.seed(self.seed)
+        # np.random.seed(self.seed)
+        # T.manual_seed(self.seed)
         self.actions.append(action)
         self.rewards.append(reward)
         self.states.append(state)
