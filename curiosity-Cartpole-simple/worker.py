@@ -40,7 +40,11 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
     # We have 1000 episodes/ time steps
     intr = []
     while episode < max_eps:
+        env.seed(SEED)
+        env.action_space.seed(SEED)
         obs = env.reset()
+        env.seed(SEED)
+        env.action_space.seed(SEED)
         # make your hidden state for the actor critic a3c
         hx = T.zeros(1, 256)
         # we need a score, a terminal flag and the number of steps taken withing the episode
@@ -62,6 +66,8 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             # print(env.step(action))
             # take your action
             obs_, reward, done, info = env.step(action)
+            env.seed(SEED)
+            env.action_space.seed(SEED)
             
             # increment total steps, episode steps, increase your score
             t_steps += 1
