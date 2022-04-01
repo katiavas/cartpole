@@ -12,7 +12,6 @@ from utils import plot_learning_curve_with_shaded_error
 
 def worker(name, input_shape, n_actions, global_agent, global_icm,
            optimizer, icm_optimizer, env_id, n_threads, icm=False):
-    T.manual_seed(5)
     T_MAX = 20
     local_agent = ActorCritic(input_shape, n_actions)
 
