@@ -8,7 +8,7 @@ import numpy as np
 
 os.environ['OMP_NUM_THREADS'] = '1'
 SEED = 111
-
+T.use_deterministic_algorithms(True)
 if __name__ == '__main__':
     random.seed(SEED)
     np.random.seed(SEED)
