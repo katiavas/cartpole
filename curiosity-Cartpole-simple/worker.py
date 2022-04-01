@@ -67,7 +67,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             # take your action
             obs_, reward, done, info = env.step(action)
             # env.seed(SEED)
-            env.action_space.seed(SEED)
+            # env.action_space.seed(SEED)
             
             # increment total steps, episode steps, increase your score
             t_steps += 1
@@ -75,6 +75,8 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             score += reward
             reward = 0  # turn off extrinsic rewards
             memory.remember(obs, action, reward, obs_, value, log_prob)
+            env.seed(SEED)
+            env.action_space.seed(SEED)
             obs = obs_
             # print(obs.shape)
             # LEARNING
