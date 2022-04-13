@@ -2,27 +2,70 @@ import numpy as np
 import torch as T
 import torch.nn as nn
 import torch.nn.functional as F
+from torch.backends import cudnn
 from torch.distributions import Categorical
+import random
+
+class Encoder(nn.Module):
+
+    def __init__(self, input_dims, feature_dim=288):
+        super(Encoder, self).__init__()
+        self.conv1 = nn.Conv2d(input_dims[0], 32, (3, 3), stride=2, padding=1)
+        self.conv2 = nn.Conv2d(32, 32, (3, 3), stride=2, padding=1)
+        self.conv3 = nn.Conv2d(32, 32, (3, 3), stride=2, padding=1)
+        self.conv4 = nn.Conv2d(32, 32, (3, 3), stride=2, padding=1)
+
+        shape = self.get_conv_out(input_dims)
+        # Layer that will extract the features
+        self.fc1 = nn.Linear(shape, feature_dim)
+
+    def get_conv_out(self, input_dims):
+        img = T.zeros(1, *input_dims)
+        x = self.conv1(img)
+        x = self.conv2(x)
+        x = self.conv3(x)
+        x = self.conv4(x)
+        shape = x.size()[0]*x.size()[1]*x.size()[2]*x.size()[3]
+        # return int(np.prod(x.size()))
+        return shape
+
+    def forward(self, img):
+        enc = F.elu(self.conv1(img))
+        enc = F.elu(self.conv2(enc))
+        enc = F.elu(self.conv3(enc))
+        enc = F.elu(self.conv4(enc))
+
+        enc_flatten = T.flatten(enc, start_dim=1)
+        # enc_flatten = enc.view((enc.size()[0], -1))
+        features = self.fc1(enc_flatten)
+
+        return features
 
 
 class ActorCritic(nn.Module):
-    def __init__(self, input_dims, n_actions, gamma=0.99, tau=0.98):
+
+    def __init__(self, input_dims , n_actions, gamma=0.99, tau=0.98):
         super(ActorCritic, self).__init__()
-        T.manual_seed(5)
+
         self.gamma = gamma
         self.tau = tau
+        self.encoder = Encoder(input_dims)
 
-        self.input = nn.Linear(*input_dims, 256)
-        self.dense = nn.Linear(256, 256)
+        # self.input = nn.Linear(*input_dims, 256)
+        # self.dense = nn.Linear(256, 256)
 
         self.gru = nn.GRUCell(256, 256)
         self.pi = nn.Linear(256, n_actions)
         self.v = nn.Linear(256, 1)
 
-    def forward(self, state, hx):
-        x = F.relu(self.input(state))
-        x = F.relu(self.dense(x))
-        hx = self.gru(x, hx)
+    def forward(self, img, hx):
+
+        # x = F.relu(self.input(state))
+        # x = F.relu(self.dense(x))
+        # hx = self.gru(x, hx)
+        state = self.encoder(img)
+        hx = self.gru(state, hx)
+
 
         pi = self.pi(hx)
         v = self.v(hx)
@@ -52,6 +95,7 @@ class ActorCritic(nn.Module):
 
     def calc_loss(self, new_states, hx, done,
                   rewards, values, log_probs, r_i_t=None):
+
         # if we are supplying an intrinsic reward them we want to add the reward from ICM
         if r_i_t is not None:
             # convert r_i_t to a numpy array because r_i_t is a tensor while rewards is a list of floating point values

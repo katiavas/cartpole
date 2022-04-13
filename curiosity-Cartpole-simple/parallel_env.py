@@ -1,4 +1,6 @@
 import torch.multiprocessing as mp
+from torch.backends import cudnn
+
 from actor_critic import ActorCritic
 from icm import ICM
 from shared_adam import SharedAdam
@@ -9,33 +11,33 @@ import numpy as np
 
 
 class ParallelEnv:
-    def __init__(self, env_id, input_shape, n_actions, icm, n_threads=8):
+    def __init__(self, env_id, global_idx,
+                 input_shape, n_actions, num_threads, icm=False):
         SEED = 111
         random.seed(SEED)
         np.random.seed(SEED)
         T.manual_seed(SEED)
-        names = [str(i) for i in range(1, n_threads+1)]
-        global_actor_critic = ActorCritic(input_shape, n_actions)
-        # share the memory of our global agent amongst our local agents
-        '''You are gonna have a whole bunch of independent agent interacting with their own thread
-        with their own environment, doing their own learning and the uploading their 
-        learning to the global actor critic'''
-        global_actor_critic.share_memory()
-        global_optim = SharedAdam(global_actor_critic.parameters())
+        T.cuda.manual_seed(SEED)
 
-        if not icm:
-            global_icm = None
-            global_icm_optim = None
-        else:
+        names = [str(i) for i in range(num_threads)]
+
+        global_actor_critic = ActorCritic(input_shape, n_actions)
+        global_actor_critic.share_memory()
+        global_optim = SharedAdam(global_actor_critic.parameters(), lr=1e-4)
+
+        if icm:
             global_icm = ICM(input_shape, n_actions)
             global_icm.share_memory()
-            global_icm_optim = SharedAdam(global_icm.parameters())
+            global_icm_optim = SharedAdam(global_icm.parameters(), lr=1e-4)
+        else:
+            global_icm = None
+            global_icm_optim = None
 
         self.ps = [mp.Process(target=worker,
                               args=(name, input_shape, n_actions,
-                                    global_actor_critic, global_icm,
-                                    global_optim, global_icm_optim, env_id,
-                                    n_threads, icm))
+                                    global_actor_critic, global_optim, env_id,
+                                    num_threads, global_idx, global_icm,
+                                    global_icm_optim, icm))
                    for name in names]
 
         [p.start() for p in self.ps]
