@@ -7,9 +7,9 @@ import numpy as np
 # params = default parameters
 from torch.backends import cudnn
 
-
+# lr=1e-4
 class SharedAdam(T.optim.Adam):
-    def __init__(self, params, lr=1e-4, betas=(0.9, 0.99), eps=1e-8,
+    def __init__(self, params, lr=0.00025, betas=(0.9, 0.99), eps=1e-8,
                  weight_decay=0):
         super(SharedAdam, self).__init__(params, lr=lr, betas=betas,
                                          eps=eps, weight_decay=weight_decay)
