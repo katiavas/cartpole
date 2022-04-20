@@ -25,7 +25,7 @@ class Image:
         frame = self.env.render(mode='rgb_array')
         # convert an image from one colour space to another(from rgb to gray)
         new_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-        img_rgb_resized = cv2.resize(new_frame, (240, 160), interpolation=cv2.INTER_CUBIC)
+        img_rgb_resized = cv2.resize(new_frame, (160, 240), interpolation=cv2.INTER_CUBIC)
         # make all pixels black
         img_rgb_resized[img_rgb_resized < 255] = 0
         img_rgb_resized = img_rgb_resized / 255
