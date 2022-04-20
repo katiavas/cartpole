@@ -32,8 +32,8 @@ class Image:
         # make pixel values between 0 and 1
         #  Every time before adding an image to our image_memory, we need to push our data by 1 frame, similar to deq
         self.image_memory = np.roll(self.image_memory, 1, axis = 0)
-        # self.image_memory[0, :, :] = img_rgb_resized
-        self.image_memory = img_rgb_resized
+        self.image_memory[0, :, :] = img_rgb_resized
+        # self.image_memory = img_rgb_resized
 
         # self.stack = collections.deque(maxlen=repeat)
         return self.image_memory
