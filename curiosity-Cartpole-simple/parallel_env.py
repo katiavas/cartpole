@@ -13,22 +13,17 @@ import numpy as np
 class ParallelEnv:
     def __init__(self, env_id, global_idx,
                  input_shape, n_actions, num_threads, icm=False):
-        SEED = 111
-        random.seed(SEED)
-        np.random.seed(SEED)
-        T.manual_seed(SEED)
-        T.cuda.manual_seed(SEED)
 
         names = [str(i) for i in range(num_threads)]
 
         global_actor_critic = ActorCritic(input_shape, n_actions)
         global_actor_critic.share_memory()
-        global_optim = SharedAdam(global_actor_critic.parameters(), lr=1e-4)
+        global_optim = SharedAdam(global_actor_critic.parameters())
 
         if icm:
             global_icm = ICM(input_shape, n_actions)
             global_icm.share_memory()
-            global_icm_optim = SharedAdam(global_icm.parameters(), lr=1e-4)
+            global_icm_optim = SharedAdam(global_icm.parameters())
         else:
             global_icm = None
             global_icm_optim = None

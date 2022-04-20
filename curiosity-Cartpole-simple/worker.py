@@ -8,30 +8,94 @@ from icm import ICM
 from memory import Memory
 import torch as T
 import random
+import collections
 from wrapper import make
 
 
+class Image:
+    def __init__(self, env_name):
+        self.env_name = env_name
+        self.env = gym.make(env_name)
+        self.ROWS = 160
+        self.COLS = 240
+        self.repeat = 4
+        self.image_memory = np.zeros((self.repeat, self.ROWS, self.COLS))
+
+    def get_image(self):
+        frame = self.env.render(mode='rgb_array')
+        # convert an image from one colour space to another(from rgb to gray)
+        new_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
+        img_rgb_resized = cv2.resize(new_frame, (240, 160), interpolation=cv2.INTER_CUBIC)
+        # make all pixels black
+        img_rgb_resized[img_rgb_resized < 255] = 0
+        img_rgb_resized = img_rgb_resized / 255
+        # make pixel values between 0 and 1
+        #  Every time before adding an image to our image_memory, we need to push our data by 1 frame, similar to deq
+        # self.image_memory = np.roll(self.image_memory, 1, axis = 0)
+        # self.image_memory[0, :, :] = img_rgb_resized
+        self.image_memory = img_rgb_resized
+
+        # self.stack = collections.deque(maxlen=repeat)
+        return self.image_memory
+
+    def reset(self):
+        self.env.reset()
+        for i in range(self.repeat):
+            state = self.get_image()
+        return state
+
+    def step(self, action):
+        reward = 0.0
+        done = False
+        for i in range(self.repeat):
+            next_state, reward, done, info = self.env.step(action)
+            next_state = self.get_image()
+            reward += reward
+            if done:
+                # obs = self.env.reset()
+                break
+        return next_state, reward, done, info
 
 
+class StackFrames(gym.ObservationWrapper):
+    def __init__(self, env, repeat=4):
+        super(StackFrames, self).__init__(env)
+        # Set our stack which will be a deque of maxlen repeat
+        self.stack = collections.deque(maxlen=repeat)
+
+    def reset(self):
+        self.stack.clear()
+        observation = self.env.reset()
+        for _ in range(self.stack.maxlen):
+            self.stack.append(observation)
+
+        return np.array(self.stack)
+
+    def observation(self, observation):
+        self.stack.append(observation)
+
+        return np.array(self.stack)
 
 def worker(name, input_shape, n_actions, global_agent,
            optimizer, env_id, n_threads, global_idx, global_icm,
            icm_optimizer, icm):
 
-    LOAD = False
-    SEED = 111
-    random.seed(SEED)
-    np.random.seed(SEED)
-    T.manual_seed(SEED)
-    T.cuda.manual_seed(SEED)
 
-    frame_buffer = [input_shape[1], input_shape[2], 1]
-    env = make(env_id, shape=frame_buffer)
-    env.seed(SEED)
-    env.action_space.seed(SEED)
-    env.observation_space.seed(SEED)
+    # frame_buffer = [input_shape[1], input_shape[2], 1]
+    # env = make(env_id, shape=frame_buffer)
+    # env = Image(env_id)
+    # print(env)
+    '''env = gym.make(env_id)
+    frame = env.render(mode='rgb_array')
+    new_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
+    img_rgb_resized = cv2.resize(new_frame, (42, 42), interpolation=cv2.INTER_CUBIC)
+    # make all pixels black
+    img_rgb_resized[img_rgb_resized < 255] = 0
+    img_rgb_resized = img_rgb_resized / 255'''
+    env1 = Image(env_id)
+    env = StackFrames(env=env1)
+
     T_MAX = 20
-
 
     local_agent = ActorCritic(input_shape, n_actions)
 
@@ -47,7 +111,7 @@ def worker(name, input_shape, n_actions, global_agent,
     # frame_buffer = [input_shape[1], input_shape[2], 1]
     # env = make_atari(env_id, shape=frame_buffer)
 
-    episode, max_steps, t_steps, scores = 0, 5000, 0, []
+    episode, max_steps, t_steps, scores = 0, 1000, 0, []
     intr = []
     l = []
     l_i = []
@@ -126,20 +190,20 @@ def worker(name, input_shape, n_actions, global_agent,
     if name == '1':
         x = [z for z in range(episode)]
         # plot_learning_curve(x, scores, 'Cartpole_pixels_ICM.png')
-        np.savetxt("Breakout_same_encoders_ICM_score8.csv",
+        np.savetxt("cartpole_pixels_score.csv",
                    scores,
                    delimiter=",",
                    fmt='% s')
-        np.savetxt("Breakout_same_encoders_ICM_intr8.csv",
+        np.savetxt("cartpole_pixels_intr.csv",
                    intr,
                    delimiter=",",
                    fmt='% s')
 
-        np.savetxt("L_I_0_same.csv",
+        np.savetxt("L_I_cartpole_pixels.csv",
                    l_i,
                    delimiter=",",
                    fmt='% s')
-        np.savetxt("ICM_ON_LOSS0_same.csv",
+        np.savetxt("ICM_ON_LOSS_cartpole_pixels.csv",
                    l,
                    delimiter=",",
                    fmt='% s')

@@ -20,6 +20,7 @@ class Encoder(nn.Module):
         self.fc1 = nn.Linear(shape, feature_dim)
 
     def get_conv_out(self, input_dims):
+
         img = T.zeros(1, *input_dims)
         x = self.conv1(img)
         x = self.conv2(x)
@@ -44,7 +45,7 @@ class Encoder(nn.Module):
 
 class ActorCritic(nn.Module):
 
-    def __init__(self, input_dims , n_actions, gamma=0.99, tau=0.98):
+    def __init__(self, input_dims , n_actions, gamma=0.99, tau=0.98, feature_dims=288):
         super(ActorCritic, self).__init__()
 
         self.gamma = gamma
@@ -54,7 +55,7 @@ class ActorCritic(nn.Module):
         # self.input = nn.Linear(*input_dims, 256)
         # self.dense = nn.Linear(256, 256)
 
-        self.gru = nn.GRUCell(256, 256)
+        self.gru = nn.GRUCell(feature_dims, 256)
         self.pi = nn.Linear(256, n_actions)
         self.v = nn.Linear(256, 1)
 

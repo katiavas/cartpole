@@ -9,28 +9,25 @@ import torch as T
 import numpy as np
 
 SEED = 111
-T.use_deterministic_algorithms(True)
-random.seed(SEED)
-np.random.seed(SEED)
-T.manual_seed(SEED)
-T.cuda.manual_seed(SEED)
-cudnn.deterministic = True
-T.backends.cudnn.deterministic = True
-T.backends.cudnn.benchmark = False
-T.backends.cudnn.enabled = False
-
-os.environ['PYTHONHASHSEED']=str(SEED)
 os.environ['OMP_NUM_THREADS'] = '1'
 
 
 if __name__ == '__main__':
+    random.seed(SEED)
+    np.random.seed(SEED)
+    T.manual_seed(SEED)
+    T.cuda.manual_seed(SEED)
+    cudnn.deterministic = True
+    T.backends.cudnn.deterministic = True
+    T.backends.cudnn.benchmark = False
+    T.backends.cudnn.enabled = False
     mp.set_start_method('spawn')
     global_ep = mp.Value('i', 0)
     env_id = 'CartPole-v1'
     n_threads = 8
     n_actions = 2
     # input_shape = [4]
-    input_shape = [4, 42, 42]
+    input_shape = [4, 160, 240]
     ICM = True
     # wandb.run.name = env_id+'/'+str(SEED) + '/ICM='+str(ICM)
     env = ParallelEnv(env_id=env_id, num_threads=n_threads,
