@@ -48,11 +48,11 @@ class Encoder(nn.Module):
         enc = F.elu(self.conv3(enc))
         enc = self.conv4(enc)
         # [T, 32, 3, 3] to [T, 288]
-        enc_flatten = T.flatten(enc, start_dim=1)
-        # conv = enc.view(enc.size()[0], -1).to(T.float)
+        # enc_flatten = T.flatten(enc, start_dim=1)
+        conv = enc.view(enc.size()[0], -1).to(T.float)
         # features = self.fc1(enc_flatten)
 
-        return enc_flatten
+        return conv
 
 
 class ICM(nn.Module):
