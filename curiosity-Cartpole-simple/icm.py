@@ -30,7 +30,7 @@ class Encoder(nn.Module):
 
         shape = self.get_conv_out(input_dims)
         # Layer that will extract the features
-        self.fc1 = nn.Linear(shape, feature_dim)
+        # self.fc1 = nn.Linear(shape, feature_dim)
 
     def get_conv_out(self, input_dims):
         img = T.zeros(1, *input_dims)
@@ -50,9 +50,9 @@ class Encoder(nn.Module):
         # [T, 32, 3, 3] to [T, 288]
         enc_flatten = T.flatten(enc, start_dim=1)
         # conv = enc.view(enc.size()[0], -1).to(T.float)
-        features = self.fc1(enc_flatten)
+        # features = self.fc1(enc_flatten)
 
-        return features
+        return enc_flatten
 
 
 class ICM(nn.Module):

@@ -17,7 +17,7 @@ class Encoder(nn.Module):
 
         shape = self.get_conv_out(input_dims)
         # Layer that will extract the features
-        self.fc1 = nn.Linear(shape, feature_dim)
+        # self.fc1 = nn.Linear(shape, feature_dim)
 
     def get_conv_out(self, input_dims):
 
