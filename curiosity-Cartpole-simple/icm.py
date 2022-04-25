@@ -31,6 +31,7 @@ class Encoder(nn.Module):
         shape = self.get_conv_out(input_dims)
         # Layer that will extract the features
         self.fc1 = nn.Linear(shape, feature_dim)
+        self.fc2(shape, feature_dim)
 
     def get_conv_out(self, input_dims):
         img = T.zeros(1, *input_dims)
@@ -89,7 +90,7 @@ class ICM(nn.Module):
         new_state = new_state.to(T.float)
 
 
-        inverse = F.elu(self.inverse(T.cat([state, new_state], dim=1)))
+        inverse = self.inverse(T.cat([state, new_state], dim=1))
         pi_logits = self.pi_logits(inverse)
 
         # Forward model
