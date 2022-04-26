@@ -11,7 +11,6 @@ import random
 import collections
 from wrapper import make
 import torchvision.transforms as TT
-import matplotlib.pyplot as plt
 
 
 
@@ -24,7 +23,7 @@ class Image:
         frame = self.env.render(mode='rgb_array')
         # convert an image from one colour space to another(from rgb to gray)
         new_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-        img_rgb_resized = cv2.resize(new_frame, (84, 84), interpolation=cv2.INTER_CUBIC)
+        img_rgb_resized = cv2.resize(new_frame, (42, 42), interpolation=cv2.INTER_CUBIC)
         # make all pixels black
         img_rgb_resized[img_rgb_resized < 255] = 0
         img_rgb_resized = img_rgb_resized / 255
@@ -302,25 +301,24 @@ def worker(name, input_shape, n_actions, global_agent,
     if name == '1':
         x = [z for z in range(episode)]
         # plot_learning_curve(x, scores, 'Cartpole_pixels_ICM.png')
-        np.savetxt("ICM_cartpole_pixels_score1.csv",
+        np.savetxt("ICM_cartpole_pixels_score2.csv",
                    scores,
                    delimiter=",",
                    fmt='% s')
-        np.savetxt("ICM_cartpole_pixels_intr1.csv",
+        np.savetxt("ICM_cartpole_pixels_intr2.csv",
                    intr,
                    delimiter=",",
                    fmt='% s')
 
-        np.savetxt("ICM_L_F_cartpole_pixels1.csv",
+        np.savetxt("ICM_L_F_cartpole_pixels2.csv",
                    l_f,
                    delimiter=",",
                    fmt='% s')
-        np.savetxt("ICM_L_I_cartpole_pixels1.csv",
+        np.savetxt("ICM_L_I_cartpole_pixels2.csv",
                    l_i,
                    delimiter=",",
                    fmt='% s')
-        np.savetxt("ICM_ON_LOSS_cartpole_pixels1.csv",
+        np.savetxt("ICM_ON_LOSS_cartpole_pixels2.csv",
                    l,
                    delimiter=",",
                    fmt='% s')
-        # plot_learning_curve_with_shaded_error(x, scores, 'ICM_shaded_error_5000.png')

@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+''' import matplotlib.pyplot as plt
 import numpy as np
 
 
@@ -40,4 +40,4 @@ def plot_learning_curve_with_shaded_error(x, scores, figure_file):
     plt.xlabel("Number of episodes")
     plt.ylabel("Extrinsic reward")
     plt.title('Running average of previous 100 episodes')
-    plt.savefig(figure_file)
+    plt.savefig(figure_file) '''
