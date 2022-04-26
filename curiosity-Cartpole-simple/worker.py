@@ -11,9 +11,10 @@ import random
 import collections
 from wrapper import make
 import torchvision.transforms as TT
+from PIL import Image
 
 
-
+'''
 class Image:
     def __init__(self, env_name):
         self.env = env_name
@@ -72,10 +73,10 @@ class StackFrames(gym.ObservationWrapper):
     def observation(self, observation):
         self.stack.append(observation)
 
-        return np.array(self.stack)
+        return np.array(self.stack)'''
 
-'''
-class RepeatAction(gym.Wrapper):
+
+'''class RepeatAction(gym.Wrapper):
 
     def __init__(self, shape, env, repeat=4, fire_first=False):
         super(RepeatAction, self).__init__(env)
@@ -98,7 +99,7 @@ class RepeatAction(gym.Wrapper):
         if self.fire_first:
             assert self.env.unwrapped.get_action_meanings()[1] == 'FIRE'
             obs, _, _, _ = self.env_step(1)
-        return obs
+        return obs'''
 
 
 resize = TT.Compose([TT.ToPILImage(),
@@ -114,8 +115,8 @@ def get_cart_location(env, screen_width):
 
 
 class Image:
-    def __init__(self, env_name):
-        self.env = env_name
+    def __init__(self, env):
+        self.env = env
         self.repeat =4
 
 
@@ -148,8 +149,8 @@ class Image:
         # Convert to float, rescale, convert to torch tensor
 
         # Resize, and add a batch dimension (BCHW)
-        plt.imshow(img_rgb_resized)
-        plt.show()
+        # plt.imshow(img_rgb_resized)
+        # plt.show()
         return img_rgb_resized
 
     def reset(self):
@@ -187,7 +188,7 @@ class StackFrames(gym.ObservationWrapper):
     def observation(self, observation):
         self.stack.append(observation)
 
-        return np.array(self.stack)'''
+        return np.array(self.stack)
 
 
 def worker(name, input_shape, n_actions, global_agent,
