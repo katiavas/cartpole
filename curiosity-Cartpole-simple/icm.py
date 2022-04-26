@@ -28,9 +28,9 @@ class Encoder(nn.Module):
         self.conv3 = nn.Conv2d(32, 32, (3, 3), stride=2, padding=1)
         self.conv4 = nn.Conv2d(32, 32, (3, 3), stride=2, padding=1)
 
-        shape = self.get_conv_out(input_dims)
+        # shape = self.get_conv_out(input_dims)
         # Layer that will extract the features
-        self.fc1 = nn.Linear(shape, feature_dim)
+        # self.fc1 = nn.Linear(shape, feature_dim)
 
     def get_conv_out(self, input_dims):
         img = T.zeros(1, *input_dims)
@@ -52,7 +52,7 @@ class Encoder(nn.Module):
         # conv = enc.view(enc.size()[0], -1).to(T.float)
         features = self.fc1(enc_flatten)
 
-        return features
+        return enc_flatten
 
 
 class ICM(nn.Module):
