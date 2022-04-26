@@ -50,7 +50,7 @@ class Encoder(nn.Module):
         # [T, 32, 3, 3] to [T, 288]
         enc_flatten = T.flatten(enc, start_dim=1)
         # conv = enc.view(enc.size()[0], -1).to(T.float)
-        features = self.fc1(enc_flatten)
+        # features = self.fc1(enc_flatten)
 
         return enc_flatten
 
