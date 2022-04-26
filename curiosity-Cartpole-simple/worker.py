@@ -11,10 +11,9 @@ import random
 import collections
 from wrapper import make
 import torchvision.transforms as TT
-from PIL import Image
 
 
-'''
+
 class Image:
     def __init__(self, env_name):
         self.env = env_name
@@ -24,7 +23,7 @@ class Image:
         frame = self.env.render(mode='rgb_array')
         # convert an image from one colour space to another(from rgb to gray)
         new_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-        img_rgb_resized = cv2.resize(new_frame, (42, 42), interpolation=cv2.INTER_CUBIC)
+        img_rgb_resized = cv2.resize(new_frame, (84, 84), interpolation=cv2.INTER_CUBIC)
         # make all pixels black
         img_rgb_resized[img_rgb_resized < 255] = 0
         img_rgb_resized = img_rgb_resized / 255
@@ -73,10 +72,10 @@ class StackFrames(gym.ObservationWrapper):
     def observation(self, observation):
         self.stack.append(observation)
 
-        return np.array(self.stack)'''
+        return np.array(self.stack)
 
-
-'''class RepeatAction(gym.Wrapper):
+'''
+class RepeatAction(gym.Wrapper):
 
     def __init__(self, shape, env, repeat=4, fire_first=False):
         super(RepeatAction, self).__init__(env)
@@ -99,7 +98,7 @@ class StackFrames(gym.ObservationWrapper):
         if self.fire_first:
             assert self.env.unwrapped.get_action_meanings()[1] == 'FIRE'
             obs, _, _, _ = self.env_step(1)
-        return obs'''
+        return obs
 
 
 resize = TT.Compose([TT.ToPILImage(),
@@ -115,8 +114,8 @@ def get_cart_location(env, screen_width):
 
 
 class Image:
-    def __init__(self, env):
-        self.env = env
+    def __init__(self, env_name):
+        self.env = env_name
         self.repeat =4
 
 
@@ -149,8 +148,8 @@ class Image:
         # Convert to float, rescale, convert to torch tensor
 
         # Resize, and add a batch dimension (BCHW)
-        # plt.imshow(img_rgb_resized)
-        # plt.show()
+        plt.imshow(img_rgb_resized)
+        plt.show()
         return img_rgb_resized
 
     def reset(self):
@@ -188,7 +187,7 @@ class StackFrames(gym.ObservationWrapper):
     def observation(self, observation):
         self.stack.append(observation)
 
-        return np.array(self.stack)
+        return np.array(self.stack)'''
 
 
 def worker(name, input_shape, n_actions, global_agent,
@@ -221,7 +220,7 @@ def worker(name, input_shape, n_actions, global_agent,
     # frame_buffer = [input_shape[1], input_shape[2], 1]
     # env = make_atari(env_id, shape=frame_buffer)
 
-    episode, max_steps, t_steps, scores = 0, 20000, 0, []
+    episode, max_steps, t_steps, scores = 0, 15000, 0, []
     intr = []
     l = []
     l_i = []

@@ -27,7 +27,7 @@ if __name__ == '__main__':
     n_threads = 12
     n_actions = 2
     # input_shape = [4]
-    input_shape = [4, 42, 42]
+    input_shape = [4, 84, 84]
     # input_shape = [4, 40, 90]
     ICM = False
     # wandb.run.name = env_id+'/'+str(SEED) + '/ICM='+str(ICM)
