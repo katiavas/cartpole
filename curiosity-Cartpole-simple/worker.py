@@ -11,8 +11,7 @@ import random
 import collections
 from wrapper import make
 import torchvision.transforms as TT
-
-
+import matplotlib.pyplot as plt
 
 class Image:
     def __init__(self, env_name):
@@ -23,7 +22,7 @@ class Image:
         frame = self.env.render(mode='rgb_array')
         # convert an image from one colour space to another(from rgb to gray)
         new_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-        img_rgb_resized = cv2.resize(new_frame, (84, 84), interpolation=cv2.INTER_CUBIC)
+        img_rgb_resized = cv2.resize(new_frame, (42, 42), interpolation=cv2.INTER_CUBIC)
         # make all pixels black
         img_rgb_resized[img_rgb_resized < 255] = 0
         img_rgb_resized = img_rgb_resized / 255
@@ -34,6 +33,9 @@ class Image:
         # self.image_memory = img_rgb_resized
 
         # self.stack = collections.deque(maxlen=repeat)
+        plt.imshow(img_rgb_resized)
+        plt.show()
+
         return img_rgb_resized
 
     def reset(self):
