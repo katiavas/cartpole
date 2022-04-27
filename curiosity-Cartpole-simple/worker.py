@@ -22,7 +22,7 @@ class Image:
         # convert an image from one colour space to another(from rgb to gray)
         new_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
         # HEIGHT, WIDTH
-        img_rgb_resized = cv2.resize(new_frame, (40, 90), interpolation=cv2.INTER_CUBIC)
+        img_rgb_resized = cv2.resize(new_frame, (84, 84), interpolation=cv2.INTER_CUBIC)
         # make all pixels black
         img_rgb_resized[img_rgb_resized < 255] = 0
         img_rgb_resized = img_rgb_resized / 255
@@ -281,14 +281,14 @@ def worker(name, input_shape, n_actions, global_agent,
         # with global_idx.get_lock():
         #    global_idx.value += 1
         if name == '1':
-            #loss_i = T.sum(L_I)
-            #l_i.append(loss_i.detach().numpy())
-            # loss_f = T.sum(L_F)
-            # l_f.append(loss_f.detach().numpy())
+            loss_i = T.sum(L_I)
+            l_i.append(loss_i.detach().numpy())
+            loss_f = T.sum(L_F)
+            l_f.append(loss_f.detach().numpy())
             b = T.sum(loss)
             l.append(b.detach().numpy())
-            # a = T.sum(intrinsic_reward)
-            # intr.append(a.detach().numpy())  # for plotting intrinsic reward
+            a = T.sum(intrinsic_reward)
+            intr.append(a.detach().numpy())  # for plotting intrinsic reward
             scores.append(score)
             avg_score = np.mean(scores[-100:])
             avg_score_5000 = np.mean(scores[max(0, episode - 5000): episode + 1])
@@ -300,28 +300,28 @@ def worker(name, input_shape, n_actions, global_agent,
     if name == '1':
         x = [z for z in range(episode)]
         # plot_learning_curve(x, scores, 'Cartpole_pixels_ICM.png')
-        '''np.savetxt("ICM_cartpole_pixels_score4.csv",
+        np.savetxt("ICM_cartpole_pixels_score5.csv",
                    scores,
                    delimiter=",",
                    fmt='% s')
-        np.savetxt("ICM_cartpole_pixels_intr4.csv",
+        np.savetxt("ICM_cartpole_pixels_intr5.csv",
                    intr,
                    delimiter=",",
                    fmt='% s')
 
-        np.savetxt("ICM_L_F_cartpole_pixels4.csv",
+        np.savetxt("ICM_L_F_cartpole_pixels5.csv",
                    l_f,
                    delimiter=",",
                    fmt='% s')
-        np.savetxt("ICM_L_I_cartpole_pixels4.csv",
+        np.savetxt("ICM_L_I_cartpole_pixels5.csv",
                    l_i,
                    delimiter=",",
                    fmt='% s')
-        np.savetxt("ICM_ON_LOSS_cartpole_pixels4.csv",
+        np.savetxt("ICM_ON_LOSS_cartpole_pixels5.csv",
                    l,
                    delimiter=",",
-                   fmt='% s')'''
-        # prosoxh sto ICM_ON_LOSS_3 nmzw einai tou A3C k oxi tou ICM
+                   fmt='% s')
+        '''# prosoxh sto ICM_ON_LOSS_3 nmzw einai tou A3C k oxi tou ICM
         np.savetxt("A3C_cartpole_pixels_score3.csv",
                    scores,
                    delimiter=",",
@@ -329,7 +329,7 @@ def worker(name, input_shape, n_actions, global_agent,
         np.savetxt("A3C_LOSS_cartpole_pixels3.csv",
                    l,
                    delimiter=",",
-                   fmt='% s')
+                   fmt='% s')'''
 
 
 
