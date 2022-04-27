@@ -11,7 +11,6 @@ import random
 import collections
 from wrapper import make
 import torchvision.transforms as TT
-import matplotlib.pyplot as plt
 
 class Image:
     def __init__(self, env_name):
@@ -33,9 +32,6 @@ class Image:
         # self.image_memory = img_rgb_resized
 
         # self.stack = collections.deque(maxlen=repeat)
-        plt.imshow(img_rgb_resized)
-        plt.show()
-
         return img_rgb_resized
 
     def reset(self):
