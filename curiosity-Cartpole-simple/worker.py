@@ -281,14 +281,14 @@ def worker(name, input_shape, n_actions, global_agent,
         # with global_idx.get_lock():
         #    global_idx.value += 1
         if name == '1':
-            loss_i = T.sum(L_I)
-            l_i.append(loss_i.detach().numpy())
-            loss_f = T.sum(L_F)
-            l_f.append(loss_f.detach().numpy())
+            #loss_i = T.sum(L_I)
+            #l_i.append(loss_i.detach().numpy())
+            # loss_f = T.sum(L_F)
+            # l_f.append(loss_f.detach().numpy())
             b = T.sum(loss)
             l.append(b.detach().numpy())
-            a = T.sum(intrinsic_reward)
-            intr.append(a.detach().numpy())  # for plotting intrinsic reward
+            # a = T.sum(intrinsic_reward)
+            # intr.append(a.detach().numpy())  # for plotting intrinsic reward
             scores.append(score)
             avg_score = np.mean(scores[-100:])
             avg_score_5000 = np.mean(scores[max(0, episode - 5000): episode + 1])
@@ -300,7 +300,7 @@ def worker(name, input_shape, n_actions, global_agent,
     if name == '1':
         x = [z for z in range(episode)]
         # plot_learning_curve(x, scores, 'Cartpole_pixels_ICM.png')
-        np.savetxt("ICM_cartpole_pixels_score4.csv",
+        '''np.savetxt("ICM_cartpole_pixels_score4.csv",
                    scores,
                    delimiter=",",
                    fmt='% s')
@@ -320,15 +320,16 @@ def worker(name, input_shape, n_actions, global_agent,
         np.savetxt("ICM_ON_LOSS_cartpole_pixels4.csv",
                    l,
                    delimiter=",",
-                   fmt='% s')
-        '''np.savetxt("ICM_cartpole_pixels_score3.csv",
+                   fmt='% s')'''
+        # prosoxh sto ICM_ON_LOSS_3 nmzw einai tou A3C k oxi tou ICM
+        np.savetxt("A3C_cartpole_pixels_score3.csv",
                    scores,
                    delimiter=",",
                    fmt='% s')
-        np.savetxt("ICM_ON_LOSS_cartpole_pixels3.csv",
+        np.savetxt("A3C_LOSS_cartpole_pixels3.csv",
                    l,
                    delimiter=",",
-                   fmt='% s')'''
+                   fmt='% s')
 
 
 
