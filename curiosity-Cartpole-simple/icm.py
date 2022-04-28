@@ -62,6 +62,8 @@ class ICM(nn.Module):
         self.alpha = alpha
         self.beta = beta
         self.encoder = Encoder(input_dims)
+        self.l5_encoder = Encoder(input_dims)
+        self.l4_encoder = Encoder(input_dims)
 
         # hard coded for cartPole environment
         # self.inverse = nn.Linear(4 * 2, 256)
@@ -81,9 +83,11 @@ class ICM(nn.Module):
         # Create inverse layer
         # inverse = F.elu(self.inverse(T.cat([state, new_state], dim=1)))
         # pi_logits = self.pi_logits(inverse)
-        state = self.encoder(obs)
+        '''state = self.encoder(obs)
         with T.no_grad():
-            new_state = self.encoder(new_obs)
+            new_state = self.encoder(new_obs)'''
+        state = self.l4_encoder(obs)
+        new_state = self.l5_encoder(new_obs)
 
         state = state.to(T.float)
         new_state = new_state.to(T.float)
