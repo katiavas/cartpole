@@ -219,7 +219,7 @@ def worker(name, input_shape, n_actions, global_agent,
     # frame_buffer = [input_shape[1], input_shape[2], 1]
     # env = make_atari(env_id, shape=frame_buffer)
 
-    episode, max_steps, t_steps, scores = 0, 16000, 0, []
+    episode, max_steps, t_steps, scores = 0, 15000, 0, []
     intr = []
     l = []
     l_i = []
@@ -300,24 +300,24 @@ def worker(name, input_shape, n_actions, global_agent,
     if name == '1':
         x = [z for z in range(episode)]
         # plot_learning_curve(x, scores, 'Cartpole_pixels_ICM.png')
-        np.savetxt("ICM_cartpole_pixels_score5.csv",
+        np.savetxt("ICM_cartpole_pixels_score7.csv",
                    scores,
                    delimiter=",",
                    fmt='% s')
-        np.savetxt("ICM_cartpole_pixels_intr5.csv",
+        np.savetxt("ICM_cartpole_pixels_intr7.csv",
                    intr,
                    delimiter=",",
                    fmt='% s')
 
-        np.savetxt("ICM_L_F_cartpole_pixels5.csv",
+        np.savetxt("ICM_L_F_cartpole_pixels7.csv",
                    l_f,
                    delimiter=",",
                    fmt='% s')
-        np.savetxt("ICM_L_I_cartpole_pixels5.csv",
+        np.savetxt("ICM_L_I_cartpole_pixels7.csv",
                    l_i,
                    delimiter=",",
                    fmt='% s')
-        np.savetxt("ICM_ON_LOSS_cartpole_pixels5.csv",
+        np.savetxt("ICM_ON_LOSS_cartpole_pixels7.csv",
                    l,
                    delimiter=",",
                    fmt='% s')
